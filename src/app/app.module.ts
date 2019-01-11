@@ -15,6 +15,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { CommonModule } from '@angular/common';  
+import { ChequesmngPage } from '../pages/chequesmng/chequesmng';
 
 var config = {
   apiKey: "AIzaSyBRJFbY1J2LEDad9sN6f53wq3Fa9ee9VyM",
@@ -31,6 +32,7 @@ var config = {
     HomePage,
     ListPage,
     SubmissionPage,
+    ChequesmngPage,
     ViewRequestDetPage
   ],
   imports: [
@@ -47,6 +49,7 @@ var config = {
     HomePage,
     ListPage,
     SubmissionPage,
+    ChequesmngPage,
     ViewRequestDetPage
   ],
   providers: [

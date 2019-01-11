@@ -1,14 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, SkipSelf } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ViewRequestDetPage } from '../view-request-det/view-request-det';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { templateJitUrl } from '@angular/compiler';
 import swal from 'sweetalert2';
 
 /**
- * Generated class for the SubmissionPage page.
+ * Generated class for the ChequesmngPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -16,17 +12,17 @@ import swal from 'sweetalert2';
 
 @IonicPage()
 @Component({
-  selector: 'page-submission',
-  templateUrl: 'submission.html',
+  selector: 'page-chequesmng',
+  templateUrl: 'chequesmng.html',
 })
-export class SubmissionPage {
+export class ChequesmngPage {
 
+  current_date;
   users;
   forms;
   temp;
-  count;
   formkeys;
-  current_date;
+  count;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.fetchDataFromFireBase();
@@ -37,7 +33,7 @@ export class SubmissionPage {
   }
 
   ionViewDidLoad() {
-
+    
   }
 
   reMapDataWithKeys() {
@@ -47,23 +43,11 @@ export class SubmissionPage {
     }
   }
 
-  reMapUsersWithData() {
-
-    for (var i = 0; i < this.count; i++) {
-      this.users.forEach(usr => {
-        if (usr.user_id == this.temp[i].user_id) {
-          this.temp[i].name = usr.name;
-        }
-      });
-    }
-  }
-
-  acceptRequest(item) {
-    // accept the request with the swipe option
-
+  confirmChequeReady(item){
+    
     swal({
       title: 'Are you sure?',
-      text: "Are you sure you want to accept this request?",
+      text: "Are you sure to notify about the cheque is ready?",
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -74,51 +58,19 @@ export class SubmissionPage {
         // executed when user confirms action
         this.reMapDataWithKeys();
         // update the value in firebase
-        this.adf.object('/forms/' + item.key).update({ status: 'accepted', processDate: this.current_date });
-        // alert('Request has been accepted !');
+        this.adf.object('/forms/' + item.key).update({ status: 'released', releaseDate: this.current_date });
+        this.notifyEmployee(item);
         swal({
           type: 'success',
-          title: 'Accepted',
-          text: 'Request has been accepted'
+          title: 'Notified',
+          text: 'Employee has been notified about the cheque'
         });
       }
     })
   }
 
-  rejectRequest(item) {
-    // reject the request with the swipe option
-
-    swal({
-      title: 'Are you sure?',
-      text: "Are you sure you want to reject this request?",
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
-    }).then((result) => {
-      if (result.value) {
-        // executed when user confirms action
-        this.reMapDataWithKeys();
-        // update the value in firebase
-        this.adf.object('/forms/' + item.key).update({ status: 'rejected', processDate: this.current_date });
-        // alert('Request has been rejected !');
-        swal({
-          type: 'error',
-          title: 'Rejected',
-          text: 'Request has been rejected !'
-        });
-      }
-    })
-  }
-
-  viewRequest(item) {
-    // go to view request in detail page
-
-    this.reMapDataWithKeys();
-    this.reMapUsersWithData();
-
-    this.navCtrl.push(ViewRequestDetPage, { selectedReqToView: item });
+  notifyEmployee(item){
+    // notify the employee using an email
   }
 
   fetchDataFromFireBase() {
@@ -152,4 +104,5 @@ export class SubmissionPage {
     );
 
   }
+
 }

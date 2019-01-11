@@ -18,14 +18,19 @@ import swal from 'sweetalert2';
 export class ViewRequestDetPage {
 
   selectedReqToView;
+  current_date;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.selectedReqToView = navParams.get("selectedReqToView");
     console.log(this.selectedReqToView);
+    var cur_day = new Date().getDate();
+    var cur_month = new Date().getMonth() + 1;
+    var cur_year = new Date().getFullYear();
+    this.current_date = cur_day + '-' + cur_month + '-' + cur_year;
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ViewRequestDetPage');
+    
   }
   acceptRequest() {
 
@@ -40,7 +45,7 @@ export class ViewRequestDetPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'accepted' });
+        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'accepted', processDate: this.current_date });
         // alert('Request has been accepted !');
         swal({
           type: 'success',
@@ -65,7 +70,7 @@ export class ViewRequestDetPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'rejected' });
+        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'rejected', processDate: this.current_date });
         // alert('Request has been rejected !');
         swal({
           type: 'error',
