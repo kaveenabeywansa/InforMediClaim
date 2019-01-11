@@ -12,6 +12,19 @@ import { ViewRequestDetPage } from '../pages/view-request-det/view-request-det';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { CommonModule } from '@angular/common';  
+
+var config = {
+  apiKey: "AIzaSyBRJFbY1J2LEDad9sN6f53wq3Fa9ee9VyM",
+  authDomain: "expense-management-e1e6d.firebaseapp.com",
+  databaseURL: "https://expense-management-e1e6d.firebaseio.com",
+  projectId: "expense-management-e1e6d",
+  storageBucket: "expense-management-e1e6d.appspot.com",
+  messagingSenderId: "687363091029"
+};
+
 @NgModule({
   declarations: [
     MyApp,
@@ -22,6 +35,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
+    AngularFireDatabaseModule,
+    AngularFireModule,
+    AngularFireModule.initializeApp(config),
+    CommonModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -35,7 +52,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

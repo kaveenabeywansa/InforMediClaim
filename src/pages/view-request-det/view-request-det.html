@@ -14,6 +14,37 @@
 
 
 <ion-content padding>
-  <h2>Employee Name</h2>
-  <h3>Other details.....</h3>
+  <ion-card>
+    <ion-avatar item-start>
+      <img src="/assets/imgs/avatar.png">
+    </ion-avatar>
+    <ion-card-header>
+      <h1>{{ selectedReqToView.name }}</h1>
+      <h3>Submitted on {{ selectedReqToView.date }}</h3>
+    </ion-card-header>
+    <ion-card-content>
+      <h2>Request Details</h2>
+      <table>
+        <tr>
+          <td>Claim No</td>
+          <td>: {{ selectedReqToView.claim_id }}</td>
+        </tr>
+        <tr>
+          <td>Designation</td>
+          <td>: {{ selectedReqToView.designation }}</td>
+        </tr>
+        <tr>
+          <td>Amount</td>
+          <td>: {{ selectedReqToView.amount }}</td>
+        </tr>
+      </table>
+
+
+      <div>
+        <button ion-button color="secondary" round (click)="acceptRequest()">Accept</button>
+        <button ion-button color="danger" round (click)="rejectRequest()">Reject</button>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
 </ion-content>

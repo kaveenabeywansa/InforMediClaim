@@ -21,38 +21,15 @@
     <h2>Action Needed !</h2>
     <h5>(Swipe left/right to view options)</h5>
     <ion-list>
-      <ion-item-sliding #item>
+
+      <!--  dummy element -->
+      <!-- <ion-item-sliding #item>
         <ion-item>
           <ion-avatar item-start>
             <img src="/assets/imgs/avatar.png">
           </ion-avatar>
           <ion-label>
-            <h2>Finn</h2>
-            <h4>Submitted on 01-01-2019</h4>
-            <p>Claim for Rs. 5000</p>
-          </ion-label>
-        </ion-item>
-        <ion-item-options side="right">
-          <button ion-button (click)="viewRequest(item)">View</button>
-          <button ion-button color="secondary" (click)="acceptRequest(item)">Accept</button>
-          <button ion-button color="danger" (click)="rejectRequest(item)">Reject</button>
-        </ion-item-options>
-
-        <ion-item-options side="left">
-          <button ion-button (click)="viewRequest(item)">View</button>
-        </ion-item-options>
-      </ion-item-sliding>
-
-
-      <!--  -->
-
-      <ion-item-sliding #item>
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="/assets/imgs/avatar.png">
-          </ion-avatar>
-          <ion-label>
-            <h2>Bruce</h2>
+            <h2>Test Bot</h2>
             <h4>Submitted on 02-01-2019</h4>
             <p>Claim for Rs. 3000</p>
           </ion-label>
@@ -66,7 +43,37 @@
         <ion-item-options side="left">
           <button ion-button (click)="viewRequest(item)">View</button>
         </ion-item-options>
-      </ion-item-sliding>
+      </ion-item-sliding> -->
+      <!--  -->
+
+      <!-- Iterate and list the pending forms -->
+      <div *ngFor="let form of forms">
+        <ion-item-sliding #item *ngIf="form.status == 'submitted'">
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="/assets/imgs/avatar.png">
+            </ion-avatar>
+            <ion-label>
+              <div *ngFor="let user of users">
+                <h2 *ngIf="user.user_id == form.user_id">
+                  {{ user.name }}
+                </h2>
+              </div>
+              <h4>Submitted on {{ form.date }}</h4>
+              <p>Claim for Rs. {{ form.amount }}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button (click)="viewRequest(form)">View</button>
+            <button ion-button color="secondary" (click)="acceptRequest(form)">Accept</button>
+            <button ion-button color="danger" (click)="rejectRequest(form)">Reject</button>
+          </ion-item-options>
+
+          <ion-item-options side="left">
+            <button ion-button (click)="viewRequest(form)">View</button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
 
       <!--  -->
 
