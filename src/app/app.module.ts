@@ -14,8 +14,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
 import { ChequesmngPage } from '../pages/chequesmng/chequesmng';
+import { HistoryPage } from '../pages/history/history';
+import { TabSubmittedPage } from '../pages/tab-submitted/tab-submitted';
+import { TabProcessedPage } from '../pages/tab-processed/tab-processed';
+import { TabReleasedPage } from '../pages/tab-released/tab-released';
+import { TabAcceptedPage } from '../pages/tab-accepted/tab-accepted';
+import { TabRejectedPage } from '../pages/tab-rejected/tab-rejected';
+import { ViewHistoryDetPage } from '../pages/view-history-det/view-history-det';
+import { ChequecollectedPage } from '../pages/chequecollected/chequecollected';
+import { TabReadyPage } from '../pages/tab-ready/tab-ready';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 var config = {
   apiKey: "AIzaSyBRJFbY1J2LEDad9sN6f53wq3Fa9ee9VyM",
@@ -33,7 +43,15 @@ var config = {
     ListPage,
     SubmissionPage,
     ChequesmngPage,
-    ViewRequestDetPage
+    HistoryPage,
+    TabSubmittedPage,
+    TabAcceptedPage,
+    TabRejectedPage,
+    TabReadyPage,
+    TabReleasedPage,
+    ViewRequestDetPage,
+    ViewHistoryDetPage,
+    ChequecollectedPage
   ],
   imports: [
     BrowserModule,
@@ -50,11 +68,20 @@ var config = {
     ListPage,
     SubmissionPage,
     ChequesmngPage,
-    ViewRequestDetPage
+    HistoryPage,
+    TabSubmittedPage,
+    TabAcceptedPage,
+    TabRejectedPage,
+    TabReadyPage,
+    TabReleasedPage,
+    ViewRequestDetPage,
+    ViewHistoryDetPage,
+    ChequecollectedPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    EmailComposer,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

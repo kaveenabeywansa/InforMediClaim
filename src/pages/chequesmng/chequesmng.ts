@@ -1,6 +1,7 @@
 import { Component, SkipSelf } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { EmailComposer } from '@ionic-native/email-composer';
 import swal from 'sweetalert2';
 
 /**
@@ -24,16 +25,17 @@ export class ChequesmngPage {
   formkeys;
   count;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase,
+    private emailComposer: EmailComposer) {
     this.fetchDataFromFireBase();
     var cur_day = new Date().getDate();
     var cur_month = new Date().getMonth() + 1;
     var cur_year = new Date().getFullYear();
-    this.current_date = cur_day + '-' + cur_month + '-' + cur_year;
+    this.current_date = cur_year + '-' + cur_month + '-' + cur_day;
   }
 
   ionViewDidLoad() {
-    
+
   }
 
   reMapDataWithKeys() {
@@ -43,8 +45,8 @@ export class ChequesmngPage {
     }
   }
 
-  confirmChequeReady(item){
-    
+  confirmChequeReady(item) {
+
     swal({
       title: 'Are you sure?',
       text: "Are you sure to notify about the cheque is ready?",
@@ -58,19 +60,41 @@ export class ChequesmngPage {
         // executed when user confirms action
         this.reMapDataWithKeys();
         // update the value in firebase
-        this.adf.object('/forms/' + item.key).update({ status: 'released', releaseDate: this.current_date });
+        this.adf.object('/forms/' + item.key).update({ status: 'ready', readyDate: this.current_date });
         this.notifyEmployee(item);
-        swal({
-          type: 'success',
-          title: 'Notified',
-          text: 'Employee has been notified about the cheque'
-        });
+        // swal({
+        //   type: 'success',
+        //   title: 'Notified',
+        //   text: 'Employee has been notified about the cheque'
+        // });
       }
     })
   }
 
-  notifyEmployee(item){
+  notifyEmployee(item) {
     // notify the employee using an email
+    console.log(item);
+    var emailAdd;
+    var Name;
+    var element;
+
+    for (element of this.users) {
+      if (element.user_id == item.user_id) {
+        emailAdd = element.email;
+        Name = element.name;
+        break;
+      }
+    }
+
+    let email = {
+      to: emailAdd,
+      cc: 'kaveen.abeywansa@infor.com', // Make it some responsible partys' email address later
+      subject: 'Your cheque is ready !',
+      body: 'Hi ' + Name + ',<br>We are pleased to inform you that your cheque is ready to be collected.<br><br>Thank you',
+      isHtml: true
+    };
+
+    this.emailComposer.open(email);
   }
 
   fetchDataFromFireBase() {

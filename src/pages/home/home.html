@@ -1,18 +1,48 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="navbar">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-card (click)="goToPage('submissions')" color="secondary" [ngClass]="{'bg-red': changeColorSub}">
+    <ion-card-header class='centerAlign'>
+      <h1>Pending Submissions</h1>
+    </ion-card-header>
+    <ion-card-content *ngIf="badgeSubCount==0">
+      You do not have any pending subissions !
+    </ion-card-content>
+    <ion-card-content *ngIf="badgeSubCount>0">
+      You have {{ badgeSubCount }} pending submissions to be processed !
+    </ion-card-content>
+  </ion-card>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <ion-card (click)="goToPage('cheques')" color="secondary" [ngClass]="{'bg-red': changeColorChq}">
+    <ion-card-header class="centerAlign">
+      <h1>Pending Cheques</h1>
+    </ion-card-header>
+    <ion-card-content *ngIf="badgeChqCount==0">
+      You do not have any cheques pending !
+    </ion-card-content>
+    <ion-card-content *ngIf="badgeChqCount>0">
+      You have {{ badgeChqCount }} cheques pending !
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card (click)="goToPage('collect')" color="secondary" [ngClass]="{'bg-red': changeColorCol}">
+    <ion-card-header class="centerAlign">
+      <h1>Cheques for Collection</h1>
+    </ion-card-header>
+    <ion-card-content *ngIf="badgeColCount==0">
+      You do not have any cheques waiting to be collected !
+    </ion-card-content>
+    <ion-card-content *ngIf="badgeColCount>0">
+      You have {{ badgeColCount }} cheques waiting to be collected !
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
