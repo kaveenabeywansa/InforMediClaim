@@ -21,9 +21,6 @@ export class ChequesmngPage {
   current_date;
   users;
   forms;
-  temp;
-  formkeys;
-  count;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase,
     private emailComposer: EmailComposer) {
@@ -36,13 +33,6 @@ export class ChequesmngPage {
 
   ionViewDidLoad() {
 
-  }
-
-  reMapDataWithKeys() {
-    // loop through to map the keys
-    for (var i = 0; i < this.count; i++) {
-      this.temp[i].key = this.formkeys[i].key;
-    }
   }
 
   confirmChequeReady(item) {
@@ -58,34 +48,36 @@ export class ChequesmngPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.reMapDataWithKeys();
-        // update the value in firebase
-        this.adf.object('/forms/' + item.key).update({ status: 'ready', readyDate: this.current_date });
-        this.notifyEmployee(item);
-        // swal({
-        //   type: 'success',
-        //   title: 'Notified',
-        //   text: 'Employee has been notified about the cheque'
-        // });
+        var emailAdd;
+        var Name;
+
+        var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(item.user_id)));
+        var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(item.ClaimNo));
+
+        var usrSub1 = users.snapshotChanges().subscribe(uData => {
+          var usrSub2 = users.valueChanges().subscribe(uData2 => {
+            var frmSub = forms.snapshotChanges().subscribe(fData => {
+              this.adf.object('/forms/' + fData[0].key).update({ status: 'ready', readyDate: this.current_date });
+              this.adf.object('/users/' + uData[0].key).update
+                ({ acceptedCount: (uData2[0]['acceptedCount'] - 1), readyCount: (uData2[0]['readyCount'] + 1) });
+
+              emailAdd = uData2[0]['email'];
+              Name = uData2[0]['name'];
+              this.notifyEmployee(emailAdd, Name);
+              frmSub.unsubscribe();
+            })
+
+            usrSub2.unsubscribe();
+          })
+
+          usrSub1.unsubscribe();
+        })
       }
     })
   }
 
-  notifyEmployee(item) {
+  notifyEmployee(emailAdd, Name) {
     // notify the employee using an email
-    console.log(item);
-    var emailAdd;
-    var Name;
-    var element;
-
-    for (element of this.users) {
-      if (element.user_id == item.user_id) {
-        emailAdd = element.email;
-        Name = element.name;
-        break;
-      }
-    }
-
     let email = {
       to: emailAdd,
       cc: 'kaveen.abeywansa@infor.com', // Make it some responsible partys' email address later
@@ -113,17 +105,6 @@ export class ChequesmngPage {
       data => {
         this.forms = data;
         // console.log(this.forms);
-
-        this.temp = data;
-        this.count = data.length;
-      }
-    );
-
-    // Get the keys for the forms
-    this.adf.list('/forms').snapshotChanges().subscribe(
-      data => {
-        this.formkeys = data;
-        // console.log(this.formkeys);
       }
     );
 

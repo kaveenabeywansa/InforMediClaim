@@ -32,7 +32,7 @@ export class TabReleasedPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TabReleasedPage');
+    
   }
 
   applyFilters() {

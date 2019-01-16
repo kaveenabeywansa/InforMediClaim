@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, keyframes } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import swal from 'sweetalert2';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { FirebaseDatabase } from 'angularfire2';
 
 /**
  * Generated class for the ViewRequestDetPage page.
@@ -20,34 +21,41 @@ export class ViewRequestDetPage {
 
   selectedReqToView;
   current_date;
+  formKey;
+  userKey;
+  oldBalance;
+  userName;
+  uEmail;
+  oldAcceptedCount = 0;
+  oldRejectedCount = 0;
+  oldPendingCount = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase,
     private emailComposer: EmailComposer) {
     this.selectedReqToView = navParams.get("selectedReqToView");
-    console.log(this.selectedReqToView);
     var cur_day = new Date().getDate();
     var cur_month = new Date().getMonth() + 1;
     var cur_year = new Date().getFullYear();
     this.current_date = cur_year + '-' + cur_month + '-' + cur_day;
+    this.getAllKeys();
   }
 
   ionViewDidLoad() {
-
+    
   }
 
   notifyEmployee(item, state) {
     // notify the employee using an email
-    console.log(item);
     if (state)
       state = 'accepted';
     else
       state = 'rejected';
 
     let email = {
-      to: item.email,
+      to: this.uEmail,
       cc: 'kaveen.abeywansa@infor.com', // Make it some responsible partys' email address later
       subject: 'Your claim request was ' + state + ' !',
-      body: 'Hi ' + item.name
+      body: 'Hi ' + this.userName
         + ',<br>This is an automated mail sent to notify that your request was ' + state + '<br><br>Thank you',
       isHtml: true
     };
@@ -56,7 +64,6 @@ export class ViewRequestDetPage {
   }
 
   acceptRequest() {
-
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to accept this request?",
@@ -68,7 +75,10 @@ export class ViewRequestDetPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'accepted', processDate: this.current_date });
+        const newBalance = parseInt(this.oldBalance) - parseInt(this.selectedReqToView.amount);
+        const newAccepted = this.oldAcceptedCount + 1;
+        this.adf.object('/forms/' + this.formKey).update({ status: 'accepted', processDate: this.current_date });
+        this.adf.object('/users/' + this.userKey).update({ balance: newBalance, acceptedCount: newAccepted, pendingCount: (this.oldPendingCount - 1) });
         // alert('Request has been accepted !');
         swal({
           type: 'success',
@@ -77,6 +87,7 @@ export class ViewRequestDetPage {
         });
         this.navCtrl.pop();
         this.notifyEmployee(this.selectedReqToView, true);
+
       }
     })
   }
@@ -94,7 +105,9 @@ export class ViewRequestDetPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.adf.object('/forms/' + this.selectedReqToView.key).update({ status: 'rejected', processDate: this.current_date });
+        const newRejected = this.oldRejectedCount + 1;
+        this.adf.object('/forms/' + this.formKey).update({ status: 'rejected', processDate: this.current_date });
+        this.adf.object('/users/' + this.userKey).update({ rejectedCount: newRejected, pendingCount: (this.oldPendingCount - 1) });
         // alert('Request has been rejected !');
         swal({
           type: 'error',
@@ -102,9 +115,31 @@ export class ViewRequestDetPage {
           text: 'Request has been rejected !'
         });
         this.navCtrl.pop();
-        this.notifyEmployee(this.selectedReqToView, true);
+        this.notifyEmployee(this.selectedReqToView, false);
       }
     })
+  }
+
+  getAllKeys() {
+    var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(this.selectedReqToView.user_id)));
+    var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(this.selectedReqToView.ClaimNo));
+
+    users.valueChanges().subscribe(data => {
+      this.oldBalance = data[0]['balance'];
+      this.userName = data[0]['name'];
+      this.uEmail = data[0]['email'];
+      this.oldAcceptedCount = data[0]['acceptedCount'];
+      this.oldRejectedCount = data[0]['rejectedCount'];
+      this.oldPendingCount = data[0]['pendingCount'];
+    });
+
+    forms.snapshotChanges().subscribe(data => {
+      this.formKey = data[0].key;
+    });
+
+    users.snapshotChanges().subscribe(data => {
+      this.userKey = data[0].key;
+    });
   }
 
 }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule, NavController } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -26,6 +26,7 @@ import { ViewHistoryDetPage } from '../pages/view-history-det/view-history-det';
 import { ChequecollectedPage } from '../pages/chequecollected/chequecollected';
 import { TabReadyPage } from '../pages/tab-ready/tab-ready';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { LoginPage } from '../pages/login/login';
 
 var config = {
   apiKey: "AIzaSyBRJFbY1J2LEDad9sN6f53wq3Fa9ee9VyM",
@@ -39,6 +40,7 @@ var config = {
 @NgModule({
   declarations: [
     MyApp,
+    LoginPage,
     HomePage,
     ListPage,
     SubmissionPage,
@@ -64,6 +66,7 @@ var config = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    LoginPage,
     HomePage,
     ListPage,
     SubmissionPage,

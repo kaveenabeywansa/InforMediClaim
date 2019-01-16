@@ -1,0 +1,45 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!-- <ion-header>
+
+  <ion-navbar>
+    <ion-title>login</ion-title>
+  </ion-navbar>
+
+</ion-header> -->
+
+
+<ion-content padding color class='login_content'>
+
+  <ion-avatar item-start class='loginpgLogo'>
+    <img src="/assets/imgs/infor.png" height=40% width=40%>
+  </ion-avatar>
+  <div class="loginmaintxt">Infor Medi Claim - Admin</div>
+
+  <ion-list>
+
+    <ion-item class="loginfields">
+      <ion-input type="text" placeholder="Username"></ion-input>
+    </ion-item>
+
+    <ion-item class="loginfields">
+      <ion-input type="password" placeholder="Password"></ion-input>
+    </ion-item>
+
+    <button ion-button full class='loginbtn1' (click)="signIn()">Sign In</button>
+    <button ion-button full color='danger' class='loginbtn1' (click)="forgotpwd()">Forgot Password</button>
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>
+      <div class="centerAlign">©Copyright 2019</div>
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

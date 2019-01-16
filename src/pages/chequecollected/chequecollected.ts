@@ -58,34 +58,33 @@ export class ChequecollectedPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-        this.reMapDataWithKeys();
-        // update the value in firebase
-        this.adf.object('/forms/' + item.key).update({ status: 'released', releaseDate: this.current_date });
-        this.notifyEmployee(item);
-        swal({
-          type: 'success',
-          title: 'Success',
-          text: 'Claim marked as collected'
-        });
-        this.notifyEmployee(item);
+
+        var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(item.user_id)));
+        var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(item.ClaimNo));
+
+        var usrSub1 = users.snapshotChanges().subscribe(uData => {
+          var usrSub2 = users.valueChanges().subscribe(uData2 => {
+            var frmSub = forms.snapshotChanges().subscribe(fData => {
+              this.adf.object('/forms/' + fData[0].key).update({ status: 'released', releaseDate: this.current_date });
+              this.adf.object('/users/' + uData[0].key).update
+                ({ readyCount: (uData2[0]['readyCount'] - 1), releaseCount: (uData2[0]['releaseCount'] + 1) });
+
+              this.notifyEmployee(uData2[0]['email'], uData2[0]['name']);
+              frmSub.unsubscribe();
+            })
+
+            usrSub2.unsubscribe();
+          })
+
+          usrSub1.unsubscribe();
+        })
+
       }
     })
   }
 
-  notifyEmployee(item) {
+  notifyEmployee(emailAdd, Name) {
     // notify the employee using an email
-    console.log(item);
-    var emailAdd;
-    var Name;
-    var element;
-
-    for (element of this.users) {
-      if (element.user_id == item.user_id) {
-        emailAdd = element.email;
-        Name = element.name;
-        break;
-      }
-    }
 
     let email = {
       to: emailAdd,
@@ -117,14 +116,6 @@ export class ChequecollectedPage {
 
         this.temp = data;
         this.count = data.length;
-      }
-    );
-
-    // Get the keys for the forms
-    this.adf.list('/forms').snapshotChanges().subscribe(
-      data => {
-        this.formkeys = data;
-        // console.log(this.formkeys);
       }
     );
 

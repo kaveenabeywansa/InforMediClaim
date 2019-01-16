@@ -5,7 +5,9 @@
         <ion-avatar item-start class='centerAlign'>
           <img src="/assets/imgs/infor.png" height=50% width=50%>
         </ion-avatar>
-        <ion-title>Infor MediClaim - Admin</ion-title>
+        <ion-title>
+          <div class="centerAlign">Infor Medi Claim - Admin</div>
+        </ion-title>
       </ion-toolbar>
     </ion-navbar>
   </ion-header>
@@ -17,6 +19,15 @@
       </button>
     </ion-list>
   </ion-content>
+
+  <ion-footer>
+    <button ion-button full color="danger" (click)="logout()">Log out</button>
+    <ion-toolbar>
+      <ion-title>
+        <div class="centerAlign">©Copyright 2019</div>
+      </ion-title>
+    </ion-toolbar>
+  </ion-footer>
 
 </ion-menu>
 
