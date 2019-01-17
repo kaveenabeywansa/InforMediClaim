@@ -52,7 +52,7 @@ export class ChequesmngPage {
         var emailAdd;
         var Name;
 
-        var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(item.user_id)));
+        var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(item.user_id));
         var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(item.ClaimNo));
 
         var usrSub1 = users.snapshotChanges().subscribe(uData => {

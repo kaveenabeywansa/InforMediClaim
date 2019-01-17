@@ -41,7 +41,6 @@ export class ViewRequestDetPage {
   }
 
   ionViewDidLoad() {
-
   }
 
   notifyEmployee(item, state) {
@@ -121,7 +120,7 @@ export class ViewRequestDetPage {
   }
 
   getAllKeys() {
-    var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(this.selectedReqToView.user_id)));
+    var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(this.selectedReqToView.user_id));
     var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(this.selectedReqToView.ClaimNo));
 
     users.valueChanges().subscribe(data => {
