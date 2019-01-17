@@ -26,6 +26,8 @@ export class TabReadyPage {
   year;
   month;
   user_name;
+  s_count;
+  s_tot;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.fetchDataFromFireBase();
@@ -33,6 +35,17 @@ export class TabReadyPage {
 
   ionViewDidLoad() {
 
+  }
+
+  getSummary() {
+    this.s_count = 0;
+    this.s_tot = 0;
+    this.forms.forEach(element => {
+      if (element['status'] == 'ready') {
+        this.s_count++;
+        this.s_tot += parseInt(element['amount']);
+      }
+    });
   }
 
   applyFilters() {
@@ -48,13 +61,15 @@ export class TabReadyPage {
     if (this.user_name != null) {
       this.userFilter();
     }
+
+    this.getSummary();
   }
 
   annualFilter() {
     var newtemp = [];
     var cnt = 0;
     this.temp.forEach(element => {
-      if (new Date(element.releaseDate).getFullYear() == this.year) {
+      if (new Date(element.readyDate).getFullYear() == this.year) {
         newtemp[cnt] = element;
         cnt++;
       }
@@ -67,7 +82,7 @@ export class TabReadyPage {
     var newtemp = [];
     var cnt = 0;
     this.temp.forEach(element => {
-      if (new Date(element.releaseDate).getFullYear() == new Date(this.month).getFullYear() && new Date(element.releaseDate).getMonth() + 1 == new Date(this.month).getMonth() + 1) {
+      if (new Date(element.readyDate).getFullYear() == new Date(this.month).getFullYear() && new Date(element.readyDate).getMonth() + 1 == new Date(this.month).getMonth() + 1) {
         newtemp[cnt] = element;
         cnt++;
       }
@@ -132,6 +147,7 @@ export class TabReadyPage {
       data => {
         this.formkeys = data;
         // console.log(this.formkeys);
+        this.getSummary();
       }
     );
 

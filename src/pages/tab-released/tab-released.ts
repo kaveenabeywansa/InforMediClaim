@@ -27,12 +27,27 @@ export class TabReleasedPage {
   month;
   user_name;
 
+  // for summery
+  s_count;
+  s_tot;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.fetchDataFromFireBase();
   }
 
   ionViewDidLoad() {
-    
+
+  }
+
+  getSummary() {
+    this.s_count = 0;
+    this.s_tot = 0;
+    this.forms.forEach(element => {
+      if (element['status'] == 'released') {
+        this.s_count++;
+        this.s_tot += parseInt(element['amount']);
+      }
+    });
   }
 
   applyFilters() {
@@ -48,6 +63,8 @@ export class TabReleasedPage {
     if (this.user_name != null) {
       this.userFilter();
     }
+
+    this.getSummary();
   }
 
   annualFilter() {
@@ -132,8 +149,10 @@ export class TabReleasedPage {
       data => {
         this.formkeys = data;
         // console.log(this.formkeys);
+        this.getSummary();
       }
     );
+
 
   }
 

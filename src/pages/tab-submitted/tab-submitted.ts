@@ -17,57 +17,6 @@ import { ViewHistoryDetPage } from '../view-history-det/view-history-det';
 })
 export class TabSubmittedPage {
 
-  // monthList = [
-  //   {
-  //     name: 'Jan',
-  //     value: 1
-  //   },
-  //   {
-  //     name: 'Feb',
-  //     value: 2
-  //   },
-  //   {
-  //     name: 'Mar',
-  //     value: 3
-  //   },
-  //   {
-  //     name: 'April',
-  //     value: 4
-  //   },
-  //   {
-  //     name: 'May',
-  //     value: 5
-  //   },
-  //   {
-  //     name: 'June',
-  //     value: 6
-  //   },
-  //   {
-  //     name: 'July',
-  //     value: 7
-  //   },
-  //   {
-  //     name: 'Aug',
-  //     value: 8
-  //   },
-  //   {
-  //     name: 'Sep',
-  //     value: 9
-  //   },
-  //   {
-  //     name: 'Oct',
-  //     value: 10
-  //   },
-  //   {
-  //     name: 'Nov',
-  //     value: 11
-  //   },
-  //   {
-  //     name: 'Dec',
-  //     value: 12
-  //   }
-  // ];
-
   users;
   forms;
   temp;
@@ -77,6 +26,8 @@ export class TabSubmittedPage {
   year;
   month;
   user_name;
+  s_count;
+  s_tot;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.fetchDataFromFireBase();
@@ -84,6 +35,17 @@ export class TabSubmittedPage {
 
   ionViewDidLoad() {
 
+  }
+
+  getSummary() {
+    this.s_count = 0;
+    this.s_tot = 0;
+    this.forms.forEach(element => {
+      if (element['status'] == 'submitted') {
+        this.s_count++;
+        this.s_tot += parseInt(element['amount']);
+      }
+    });
   }
 
   applyFilters() {
@@ -99,13 +61,14 @@ export class TabSubmittedPage {
     if (this.user_name != null) {
       this.userFilter();
     }
+    this.getSummary();
   }
 
   annualFilter() {
     var newtemp = [];
     var cnt = 0;
     this.temp.forEach(element => {
-      if (new Date(element.date).getFullYear() == this.year) {
+      if (new Date(element.requestDate).getFullYear() == this.year) {
         newtemp[cnt] = element;
         cnt++;
       }
@@ -118,7 +81,7 @@ export class TabSubmittedPage {
     var newtemp = [];
     var cnt = 0;
     this.temp.forEach(element => {
-      if (new Date(element.date).getFullYear() == new Date(this.month).getFullYear() && new Date(element.date).getMonth() + 1 == new Date(this.month).getMonth() + 1) {
+      if (new Date(element.requestDate).getFullYear() == new Date(this.month).getFullYear() && new Date(element.requestDate).getMonth() + 1 == new Date(this.month).getMonth() + 1) {
         newtemp[cnt] = element;
         cnt++;
       }
@@ -183,6 +146,7 @@ export class TabSubmittedPage {
       data => {
         this.formkeys = data;
         // console.log(this.formkeys);
+        this.getSummary();
       }
     );
 
