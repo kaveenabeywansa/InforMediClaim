@@ -41,7 +41,7 @@ export class ViewRequestDetPage {
   }
 
   ionViewDidLoad() {
-    
+
   }
 
   notifyEmployee(item, state) {
@@ -64,6 +64,7 @@ export class ViewRequestDetPage {
   }
 
   acceptRequest() {
+    // mark the listing as accepted
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to accept this request?",
@@ -87,13 +88,12 @@ export class ViewRequestDetPage {
         });
         this.navCtrl.pop();
         this.notifyEmployee(this.selectedReqToView, true);
-
       }
     })
   }
 
   rejectRequest() {
-
+    // mark the listing as rejected
     swal({
       title: 'Are you sure?',
       text: "Are you sure you want to reject this request?",

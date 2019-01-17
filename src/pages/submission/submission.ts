@@ -61,8 +61,6 @@ export class SubmissionPage {
     }
   }
 
-
-
   viewRequest(item) {
     // go to view request in detail page
 

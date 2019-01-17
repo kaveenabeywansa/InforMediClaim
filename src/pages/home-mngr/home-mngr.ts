@@ -43,8 +43,9 @@ export class HomeMngrPage {
   }
 
   showChart() {
+    // Generate charts for both overall and annual
 
-    // Create the data table.
+    // get data for both charts
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Status');
     data.addColumn('number', 'Count');
@@ -67,7 +68,7 @@ export class HomeMngrPage {
       ['Claimed', this.annual_clmdCount]
     ]);
 
-    // Set chart options
+    // options for the charts
     var options = {
       'title': 'Claim Statistics - Overall',
       'width': 400,
@@ -80,7 +81,7 @@ export class HomeMngrPage {
       'height': 300
     };
 
-    // Instantiate and draw our chart, passing in some options.
+    // instantiate and draw the charts
     var chart = new google.visualization.PieChart(document.getElementById('overall_stats'));
     chart.draw(data, options);
 
@@ -101,6 +102,7 @@ export class HomeMngrPage {
     // Get list of forms
     this.adf.list('/forms').valueChanges().subscribe(
       data => {
+        // set chart data to zero at first
         this.forms = data;
         this.subCount = 0;
         this.accCount = 0;
@@ -113,6 +115,8 @@ export class HomeMngrPage {
         this.annual_rejCount = 0;
         this.annual_chRdyCount = 0;
         this.annual_clmdCount = 0;
+
+        // loop through the forms and get the count of all statuses
         data.forEach(element => {
           if (element['status'] == 'submitted') {
             this.subCount++;
@@ -141,6 +145,8 @@ export class HomeMngrPage {
             }
           }
         });
+
+        // regenerate the charts for new data
         this.showChart();
       }
     );

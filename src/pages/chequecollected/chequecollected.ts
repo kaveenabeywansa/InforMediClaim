@@ -21,9 +21,6 @@ export class ChequecollectedPage {
   current_date;
   users;
   forms;
-  temp;
-  formkeys;
-  count;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase,
     private emailComposer: EmailComposer) {
@@ -31,21 +28,15 @@ export class ChequecollectedPage {
     var cur_day = new Date().getDate();
     var cur_month = new Date().getMonth() + 1;
     var cur_year = new Date().getFullYear();
-    this.current_date = cur_year + '-' + cur_month + '-' + cur_day;
+    this.current_date = cur_year + '-' + cur_month + '-' + cur_day; // stores the current date
   }
 
   ionViewDidLoad() {
 
   }
 
-  reMapDataWithKeys() {
-    // loop through to map the keys
-    for (var i = 0; i < this.count; i++) {
-      this.temp[i].key = this.formkeys[i].key;
-    }
-  }
-
   confirmChequeReady(item) {
+    // marks the listing as collected if user confirms the prompt
 
     swal({
       title: 'Are you sure?',
@@ -58,7 +49,6 @@ export class ChequecollectedPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
-
         var users = this.adf.list('/users', ref => ref.orderByChild('user_id').equalTo(parseInt(item.user_id)));
         var forms = this.adf.list('/forms', ref => ref.orderByChild('ClaimNo').equalTo(item.ClaimNo));
 
@@ -104,7 +94,6 @@ export class ChequecollectedPage {
     this.adf.list('/users').valueChanges().subscribe(
       data => {
         this.users = data;
-        // console.log(this.users);
       }
     );
 
@@ -112,10 +101,6 @@ export class ChequecollectedPage {
     this.adf.list('/forms').valueChanges().subscribe(
       data => {
         this.forms = data;
-        // console.log(this.forms);
-
-        this.temp = data;
-        this.count = data.length;
       }
     );
 

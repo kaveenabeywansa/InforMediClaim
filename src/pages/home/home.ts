@@ -25,10 +25,8 @@ export class HomePage {
 
   goToPage(page) {
     if (page == 'submissions') {
-      // this.navCtrl.setRoot(SubmissionPage);
       this.navCtrl.push(SubmissionPage);
     } else if (page == 'cheques') {
-      // this.navCtrl.setRoot(ChequesmngPage);
       this.navCtrl.push(ChequesmngPage);
     } else if (page == 'collect')
       this.navCtrl.push(ChequecollectedPage);

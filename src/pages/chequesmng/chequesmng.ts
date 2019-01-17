@@ -36,6 +36,7 @@ export class ChequesmngPage {
   }
 
   confirmChequeReady(item) {
+    // record the cheque as ready if user confirms the prompt
 
     swal({
       title: 'Are you sure?',
@@ -96,7 +97,6 @@ export class ChequesmngPage {
     this.adf.list('/users').valueChanges().subscribe(
       data => {
         this.users = data;
-        // console.log(this.users);
       }
     );
 
@@ -104,7 +104,6 @@ export class ChequesmngPage {
     this.adf.list('/forms').valueChanges().subscribe(
       data => {
         this.forms = data;
-        // console.log(this.forms);
       }
     );
 
