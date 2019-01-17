@@ -30,7 +30,8 @@
       <ion-input type="password" placeholder="Password"></ion-input>
     </ion-item>
 
-    <button ion-button full class='loginbtn1' (click)="signIn()">Sign In</button>
+    <button ion-button full class='loginbtn1' (click)="signIn('admin')">Sign In (Admin)</button>
+    <button ion-button full class='loginbtn1' (click)="signIn('manager')">Sign In (Manager)</button>
     <button ion-button full color='danger' class='loginbtn1' (click)="forgotpwd()">Forgot Password</button>
 
   </ion-list>

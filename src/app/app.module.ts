@@ -27,6 +27,7 @@ import { ChequecollectedPage } from '../pages/chequecollected/chequecollected';
 import { TabReadyPage } from '../pages/tab-ready/tab-ready';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { LoginPage } from '../pages/login/login';
+import { HomeMngrPage } from '../pages/home-mngr/home-mngr';
 
 var config = {
   apiKey: "AIzaSyBRJFbY1J2LEDad9sN6f53wq3Fa9ee9VyM",
@@ -53,7 +54,8 @@ var config = {
     TabReleasedPage,
     ViewRequestDetPage,
     ViewHistoryDetPage,
-    ChequecollectedPage
+    ChequecollectedPage,
+    HomeMngrPage
   ],
   imports: [
     BrowserModule,
@@ -79,7 +81,8 @@ var config = {
     TabReleasedPage,
     ViewRequestDetPage,
     ViewHistoryDetPage,
-    ChequecollectedPage
+    ChequecollectedPage,
+    HomeMngrPage
   ],
   providers: [
     StatusBar,

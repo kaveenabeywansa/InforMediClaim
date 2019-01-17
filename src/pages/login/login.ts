@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import swal from 'sweetalert2';
 import { HomePage } from '../home/home';
+import { HomeMngrPage } from '../home-mngr/home-mngr';
 
 /**
  * Generated class for the LoginPage page.
@@ -17,19 +18,26 @@ import { HomePage } from '../home/home';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    
+  events;
+  constructor(public navCtrl: NavController, public navParams: NavParams, events: Events) {
+    this.events = events;
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  signIn(){
-    this.navCtrl.setRoot(HomePage);
+  signIn(user) {
+    if (user == 'admin') {
+      this.events.publish('user:admin');
+      this.navCtrl.setRoot(HomePage);
+    } else {
+      this.events.publish('user:manager');
+      this.navCtrl.setRoot(HomeMngrPage);
+    }
   }
 
-  forgotpwd(){
+  forgotpwd() {
     swal({
       type: 'success',
       title: 'Success',
