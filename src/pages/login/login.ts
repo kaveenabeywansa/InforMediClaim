@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events, MenuController, ToastController } from 'ionic-angular';
 import swal from 'sweetalert2';
 import { HomePage } from '../home/home';
 import { HomeMngrPage } from '../home-mngr/home-mngr';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { Network } from '@ionic-native/network';
 
 /**
  * Generated class for the LoginPage page.
@@ -20,15 +21,41 @@ import { AngularFireDatabase } from 'angularfire2/database';
 export class LoginPage {
 
   events;
-  constructor(public navCtrl: NavController, public navParams: NavParams, events: Events, private afd: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, events: Events, private afd: AngularFireDatabase,
+    private menu: MenuController, private network: Network, public toast: ToastController) {
     this.events = events;
     this.balanceResetter();
+    this.checkInternet();
   }
 
   ionViewDidLoad() {
+    this.menu.enable(false);
+  }
+
+  checkInternet() {
+    if (this.network.type == 'none') {
+      this.toast.create({
+        message: 'No Internet Connection Detected !',
+        duration: 2000
+      }).present();
+    }
+    this.network.onConnect().subscribe(() => {
+      this.toast.create({
+        message: 'Internet Connected !',
+        duration: 2000
+      }).present();
+    });
+
+    this.network.onDisconnect().subscribe(() => {
+      this.toast.create({
+        message: 'Internet Disconnected !',
+        duration: 2000
+      }).present();
+    });
   }
 
   signIn(user) {
+    this.menu.enable(true);
     if (user == 'admin') {
       // user level is administrator
       this.events.publish('user:admin');

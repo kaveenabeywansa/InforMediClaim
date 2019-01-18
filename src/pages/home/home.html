@@ -30,7 +30,7 @@
 
   <ion-card (click)="goToPage('cheques')" color="secondary" [ngClass]="{'bg-red': changeColorChq}">
     <ion-card-header class="centerAlign">
-      <h1>Pending Cheques</h1>
+      <h1>Cheque Ready Queue</h1>
     </ion-card-header>
     <ion-card-content *ngIf="badgeChqCount==0">
       You do not have any cheques pending !
@@ -42,7 +42,7 @@
 
   <ion-card (click)="goToPage('collect')" color="secondary" [ngClass]="{'bg-red': changeColorCol}">
     <ion-card-header class="centerAlign">
-      <h1>Cheques for Collection</h1>
+      <h1>Collected Cheques</h1>
     </ion-card-header>
     <ion-card-content *ngIf="badgeColCount==0">
       You do not have any cheques waiting to be collected !

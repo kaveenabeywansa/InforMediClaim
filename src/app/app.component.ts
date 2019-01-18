@@ -56,8 +56,8 @@ export class MyApp {
         { title: 'Dashboard', component: HomePage },
         // { title: 'List', component: ListPage },
         { title: 'Pending Submissions', component: SubmissionPage },
-        { title: 'Cheques Ready', component: ChequesmngPage },
-        { title: 'Cheque Collected', component: ChequecollectedPage },
+        { title: 'Cheque Ready Queue', component: ChequesmngPage },
+        { title: 'Collected Cheques', component: ChequecollectedPage },
         { title: 'History', component: HistoryPage }
       ];
     });
