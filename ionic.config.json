@@ -1,5 +1,7 @@
 {
   "name": "inforMediClaim",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }

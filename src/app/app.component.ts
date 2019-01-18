@@ -1,10 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, NavController, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import { SubmissionPage } from '../pages/submission/submission';
+import { ChequesmngPage } from '../pages/chequesmng/chequesmng';
+import { HistoryPage } from '../pages/history/history';
+import { ChequecollectedPage } from '../pages/chequecollected/chequecollected';
+import { LoginPage } from '../pages/login/login';
+import { HomeMngrPage } from '../pages/home-mngr/home-mngr';
 
 @Component({
   templateUrl: 'app.html'
@@ -12,20 +18,59 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  toastCtrl;
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+    events: Events, toastCtrl: ToastController) {
+      this.toastCtrl = toastCtrl;
     this.initializeApp();
 
+    let rootScope = {
+      backButtonPressedOnceToExit: false
+    };
+    this.platform.registerBackButtonAction(() => {
+      if (rootScope['backButtonPressedOnceToExit']) {
+        this.platform.exitApp();
+      }
+      else {
+        rootScope['backButtonPressedOnceToExit'] = true;
+        this.toastCtrl.create({
+          message: "Press back button again to exit",
+          duration: 2000
+        }).present();
+        setTimeout(() => {
+          rootScope['backButtonPressedOnceToExit'] = false;
+        }, 2000);
+      }
+      return false;
+    }, 101);
+
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
+    this.pages = [];
+
+    events.subscribe('user:admin', () => {
+      this.pages = [
+        { title: 'Dashboard', component: HomePage },
+        // { title: 'List', component: ListPage },
+        { title: 'Pending Submissions', component: SubmissionPage },
+        { title: 'Cheque Ready Queue', component: ChequesmngPage },
+        { title: 'Collected Cheques', component: ChequecollectedPage },
+        { title: 'History', component: HistoryPage }
+      ];
+    });
+
+    events.subscribe('user:manager', () => {
+      this.pages = [
+        { title: 'Dashboard', component: HomeMngrPage },
+        { title: 'History', component: HistoryPage }
+      ];
+    });
 
   }
+
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -34,6 +79,9 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+  logout() {
+    this.nav.setRoot(LoginPage);
   }
 
   openPage(page) {
