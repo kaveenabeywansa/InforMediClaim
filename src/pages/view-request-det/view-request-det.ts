@@ -1,9 +1,8 @@
-import { Component, keyframes } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import swal from 'sweetalert2';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { FirebaseDatabase } from 'angularfire2';
 
 /**
  * Generated class for the ViewRequestDetPage page.
@@ -74,19 +73,28 @@ export class ViewRequestDetPage {
       confirmButtonText: 'Yes'
     }).then((result) => {
       if (result.value) {
-        // executed when user confirms action
-        const newBalance = parseInt(this.oldBalance) - parseInt(this.selectedReqToView.amount);
-        const newAccepted = this.oldAcceptedCount + 1;
-        this.adf.object('/forms/' + this.formKey).update({ status: 'accepted', processDate: this.current_date });
-        this.adf.object('/users/' + this.userKey).update({ balance: newBalance, acceptedCount: newAccepted, pendingCount: (this.oldPendingCount - 1) });
-        // alert('Request has been accepted !');
-        swal({
-          type: 'success',
-          title: 'Accepted',
-          text: 'Request has been accepted'
-        });
-        this.navCtrl.pop();
-        this.notifyEmployee(this.selectedReqToView, true);
+        // user confirms action
+        // validate if balance is available to claim
+        if (this.oldBalance > this.selectedReqToView.amount) {
+          const newBalance = parseInt(this.oldBalance) - parseInt(this.selectedReqToView.amount);
+          const newAccepted = this.oldAcceptedCount + 1;
+          this.adf.object('/forms/' + this.formKey).update({ status: 'accepted', processDate: this.current_date });
+          this.adf.object('/users/' + this.userKey).update({ balance: newBalance, acceptedCount: newAccepted, pendingCount: (this.oldPendingCount - 1) });
+          // alert('Request has been accepted !');
+          swal({
+            type: 'success',
+            title: 'Accepted',
+            text: 'Request has been accepted'
+          });
+          this.navCtrl.pop();
+          this.notifyEmployee(this.selectedReqToView, true);
+        } else {
+          swal({
+            type: 'error',
+            title: 'Failed',
+            text: 'Insufficient user balance to claim !'
+          });
+        }
       }
     })
   }

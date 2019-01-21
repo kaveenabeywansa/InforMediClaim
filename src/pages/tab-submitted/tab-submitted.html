@@ -16,7 +16,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
 
   <ion-card>
     <!-- <ion-card-header>
@@ -24,44 +24,44 @@
     </ion-card-header> -->
     <ion-card-content>
 
-      <ion-item>
+      <ion-item class='historyFilterCard'>
         <ion-label>Year</ion-label>
         <ion-datetime displayFormat="YYYY" [(ngModel)]="year"></ion-datetime>
       </ion-item>
 
-      <ion-item>
-        <ion-label>Date</ion-label>
+      <ion-item class='historyFilterCard'>
+        <ion-label>Month</ion-label>
         <ion-datetime displayFormat="MM YYYY" [(ngModel)]="month"></ion-datetime>
       </ion-item>
 
-      <ion-item>
+      <ion-item class='historyFilterCard'>
         <ion-label>Employee</ion-label>
         <ion-select [(ngModel)]="user_name">
           <ion-option *ngFor="let usr of users" value="{{usr.user_id}}">{{usr.name}}</ion-option>
         </ion-select>
       </ion-item>
 
-      <button ion-button full (click)="applyFilters()">Apply Filters</button>
+      <button class='historyFilterCard' ion-button full (click)="applyFilters()">Apply Filters</button>
     </ion-card-content>
   </ion-card>
 
   <div>
     <ion-card class='summaryCard'>
-      <h1 class='centerAlign'>Summary</h1>
+      <div class='historySum'>Summary</div>
       <ion-grid>
         <ion-row>
           <ion-col>
             Count : {{ s_count }}
           </ion-col>
           <ion-col>
-            Total : Rs. {{ s_tot }}
+            Total : LKR {{ s_tot | number : '1.2-2'}}
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-card>
   </div>
 
-  <h5>(Click on an Item to view more details)</h5>
+  <div class='historySwipeIns'>(Click on an Item to view more details)</div>
   <ion-list>
 
     <!-- Iterate and list the pending forms -->
@@ -78,7 +78,7 @@
               </h2>
             </div>
             <h4>Submitted on {{ form.requestDate }}</h4>
-            <p>Claim for Rs. {{ form.amount }}</p>
+            <p>Claim for LKR {{ form.amount | number : '1.2-2'}}</p>
           </ion-label>
         </ion-item>
         <ion-item-options side="right">

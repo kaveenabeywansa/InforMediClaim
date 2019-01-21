@@ -9,16 +9,16 @@ page-login {
 .loginpgLogo{
     display: flex;
     justify-content: center;
-    margin-top: 15%;
+    margin-top: 25%;
     margin-bottom: 5%;
 }
 
 .loginmaintxt{
     display: flex;
     justify-content: center;
-    margin-bottom: 10%;
+    margin-bottom: 15%;
     color: white;
-    font-size: 25px;
+    font-size: 150%;
 }
 
 .loginfields{
@@ -33,4 +33,15 @@ page-login {
     width:60%;
     margin-left: 20%;
     margin-right: 20%;
+}
+.loginFooter{
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 70%;
+    background-color: gray;
+    width: 100%;
+}
+.loginTxtFlds{
+    color:white;
 }

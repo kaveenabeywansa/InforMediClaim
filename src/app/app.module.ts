@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule, NavController } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -18,7 +18,6 @@ import { CommonModule } from '@angular/common';
 import { ChequesmngPage } from '../pages/chequesmng/chequesmng';
 import { HistoryPage } from '../pages/history/history';
 import { TabSubmittedPage } from '../pages/tab-submitted/tab-submitted';
-import { TabProcessedPage } from '../pages/tab-processed/tab-processed';
 import { TabReleasedPage } from '../pages/tab-released/tab-released';
 import { TabAcceptedPage } from '../pages/tab-accepted/tab-accepted';
 import { TabRejectedPage } from '../pages/tab-rejected/tab-rejected';

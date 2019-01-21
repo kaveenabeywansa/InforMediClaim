@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
@@ -34,7 +34,7 @@ export class HomeMngrPage {
   annual_clmdCount = 1;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public adf: AngularFireDatabase) {
+    public adf: AngularFireDatabase, private platform: Platform) {
     this.fetchDataFromFireBase();
   }
 
@@ -71,14 +71,14 @@ export class HomeMngrPage {
     // options for the charts
     var options = {
       'title': 'Claim Statistics - Overall',
-      'width': 400,
-      'height': 300
+      'width': this.platform.width(),
+      is3D: true,
     };
 
     var options2 = {
       'title': 'Claim Statistics - Annual',
-      'width': 400,
-      'height': 300
+      'width': this.platform.width(),
+      is3D: true,
     };
 
     // instantiate and draw the charts

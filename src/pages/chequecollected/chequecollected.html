@@ -9,47 +9,38 @@
 
 </ion-header>
 
+<ion-content>
+  <!-- <h2>Action Needed !</h2> -->
+  <ion-list>
 
-<ion-content padding>
-  <ion-content padding>
-    <!-- <h2>Action Needed !</h2> -->
-    <ion-list>
+    <!-- Iterate and list the pending forms -->
+    <div *ngFor="let form of forms">
+      <ion-item-sliding #item *ngIf="form.status == 'ready'">
+        <ion-item>
+          <ion-label>
+            <div *ngFor="let user of users">
+              <h2 *ngIf="user.user_id == form.user_id">
+                {{ user.name }}
+              </h2>
+            </div>
+            <h4>Submitted on {{ form.requestDate }}</h4>
+            <h4>Accepted on {{ form.processDate }}</h4>
+            <p>Claim for LKR {{ form.amount | number : '1.2-2'}}</p>
+          </ion-label>
+        </ion-item>
 
-      <!-- Iterate and list the pending forms -->
-      <div *ngFor="let form of forms">
-        <ion-item-sliding #item *ngIf="form.status == 'ready'">
-          <ion-item>
-            <!-- <ion-avatar item-start>
-                <img src="/assets/imgs/avatar.png">
-              </ion-avatar> -->
-            <ion-label>
-              <div *ngFor="let user of users">
-                <h2 *ngIf="user.user_id == form.user_id">
-                  {{ user.name }}
-                </h2>
-              </div>
-              <h4>Submitted on {{ form.requestDate }}</h4>
-              <h4>Accepted on {{ form.processDate }}</h4>
-              <p>Claim for Rs. {{ form.amount }}</p>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="right">
-            <button ion-button color="secondary" (click)="confirmChequeReady(form)">Cheque Collected</button>
-          </ion-item-options>
-          <ion-item-options side="left">
-            <button ion-button color="secondary" (click)="confirmChequeReady(form)">Cheque Collected</button>
-          </ion-item-options>
-        </ion-item-sliding>
-      </div>
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="confirmChequeReady(form)">Cheque Collected</button>
+        </ion-item-options>
 
-    </ion-list>
-  </ion-content>
-
+        <ion-item-options side="left">
+          <button ion-button color="secondary" (click)="confirmChequeReady(form)">Cheque Collected</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+  </ion-list>
 </ion-content>
+
 <ion-footer>
-  <ion-toolbar>
-    <ion-title>
-      <div class="centerAlign">(Swipe to view options)</div>
-    </ion-title>
-  </ion-toolbar>
+  <div class="swipe_ins">(Swipe to view options)</div>
 </ion-footer>

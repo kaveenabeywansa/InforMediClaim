@@ -21,6 +21,9 @@ import { Network } from '@ionic-native/network';
 export class LoginPage {
 
   events;
+  in_username;
+  in_password;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, events: Events, private afd: AngularFireDatabase,
     private menu: MenuController, private network: Network, public toast: ToastController) {
     this.events = events;
@@ -54,16 +57,49 @@ export class LoginPage {
     });
   }
 
-  signIn(user) {
-    this.menu.enable(true);
-    if (user == 'admin') {
-      // user level is administrator
-      this.events.publish('user:admin');
-      this.navCtrl.setRoot(HomePage);
+  signIn() {
+    if (this.in_username != null && this.in_password != null) {
+      try {
+        // match username against db credentials
+        var users = this.afd.list('/users', ref => ref.orderByChild('username').equalTo(this.in_username)).valueChanges().subscribe(user_data => {
+          if (user_data.length > 0) {
+            console.log(user_data);
+            const db_pwd = user_data[0]['password'];
+            if (db_pwd == this.in_password) {
+              // correct credentials
+              const user_type = user_data[0]['user_type'];
+              this.menu.enable(true);
+              this.toast.create({
+                message: 'Welcome ' + user_data[0]['name'],
+                duration: 2000
+              }).present();
+
+              // identify user type and redirect
+              if (user_type == 'admin') {
+                // open admin dashboard
+                this.events.publish('user:admin');
+                this.navCtrl.setRoot(HomePage);
+              } else if (user_type == 'manager') {
+                // open manager dashboard
+                this.events.publish('user:manager');
+                this.navCtrl.setRoot(HomeMngrPage);
+              }
+            } else {
+              // incorrect credentials
+              alert('Incorrect credentials ! Please Re-Try !');
+            }
+          } else {
+            alert('Incorrect credentials ! Please Re-Try !');
+          }
+          users.unsubscribe();
+        });
+
+      } catch (error) {
+        alert('An Error Occured !');
+        console.log(error);
+      }
     } else {
-      // user level is manager
-      this.events.publish('user:manager');
-      this.navCtrl.setRoot(HomeMngrPage);
+      alert('Please enter your username and password !');
     }
   }
 
@@ -77,6 +113,7 @@ export class LoginPage {
   }
 
   balanceResetter() {
+    // a function that resets users' balances back to te limit amount every year
     var s1 = this.afd.list('/settings').valueChanges().subscribe(data => {
       if (new Date(data[0] + '').getFullYear() != new Date().getFullYear()) {
         // first app launch of the year. reset user balances to limit

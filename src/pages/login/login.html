@@ -17,24 +17,16 @@
   <ion-list>
 
     <ion-item class="loginfields">
-      <ion-input type="text" placeholder="Username"></ion-input>
+      <ion-input type="text" placeholder="Username" [(ngModel)]="in_username" class="loginTxtFlds"></ion-input>
     </ion-item>
 
     <ion-item class="loginfields">
-      <ion-input type="password" placeholder="Password"></ion-input>
+      <ion-input type="password" placeholder="Password" [(ngModel)]="in_password" class="loginTxtFlds"></ion-input>
     </ion-item>
 
-    <button ion-button full class='loginbtn1' (click)="signIn('admin')">Sign In (Admin)</button>
-    <button ion-button full class='loginbtn1' (click)="signIn('manager')">Sign In (Manager)</button>
-    <button ion-button full color='danger' class='loginbtn1' (click)="forgotpwd()">Forgot Password</button>
+    <button ion-button full class='loginbtn1' (click)="signIn()">Sign In</button>
+    <!-- <button ion-button full class='loginbtn1' (click)="signIn('manager')">Sign In (Manager)</button>
+    <button ion-button full color='danger' class='loginbtn1' (click)="forgotpwd()">Forgot Password</button> -->
 
   </ion-list>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-title>
-      <div class="centerAlign">©Copyright 2019</div>
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>

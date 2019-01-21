@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ViewRequestDetPage } from '../view-request-det/view-request-det';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
+import { AngularFireDatabase } from 'angularfire2/database';
 import 'rxjs/add/operator/map';
-import { templateJitUrl } from '@angular/compiler';
-import swal from 'sweetalert2';
-import { EmailComposer } from '@ionic-native/email-composer';
 
 /**
  * Generated class for the SubmissionPage page.
@@ -29,8 +25,7 @@ export class SubmissionPage {
   formkeys;
   current_date;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase,
-    private emailComposer: EmailComposer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public adf: AngularFireDatabase) {
     this.fetchDataFromFireBase();
     var cur_day = new Date().getDate();
     var cur_month = new Date().getMonth() + 1;

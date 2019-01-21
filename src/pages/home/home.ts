@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { SubmissionPage } from '../submission/submission';
 import { ChequesmngPage } from '../chequesmng/chequesmng';
 import { ChequecollectedPage } from '../chequecollected/chequecollected';
+
+declare var google;
 
 @Component({
   selector: 'page-home',
@@ -19,8 +21,29 @@ export class HomePage {
   changeColorCol = false;
   forms;
 
-  constructor(public navCtrl: NavController, public adf: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public adf: AngularFireDatabase, private platform: Platform) {
     this.fetchDataFromFireBase();
+  }
+
+  ionViewDidLoad() {
+    this.generateCharts();
+  }
+
+  generateCharts() {
+    var data = google.visualization.arrayToDataTable([
+      ['Task', 'Hours per Day'],
+      ['Submissions', this.badgeSubCount],
+      ['Wait Queue', this.badgeChqCount],
+      ['Collectibles', this.badgeColCount]
+    ]);
+
+    var options = {
+      pieHole: 0.4,
+      'width': this.platform.width()
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('adminDashCharts'));
+    chart.draw(data, options);
   }
 
   goToPage(page) {
@@ -36,22 +59,22 @@ export class HomePage {
     // Retrieves data from firebase and stores it in a variable
 
     // Get list of forms
-    this.adf.list('/forms').valueChanges().subscribe(
-      data => {
-        this.forms = data;
-        this.forms.forEach(element => {
-          if (element.status == 'submitted') {
-            this.badgeSubCount++;
-            this.changeColorSub = true;
-          } else if (element.status == 'accepted') {
-            this.badgeChqCount++;
-            this.changeColorChq = true
-          } else if (element.status == 'ready') {
-            this.badgeColCount++;
-            this.changeColorCol = true;
-          }
-        });
-      }
+    this.adf.list('/forms').valueChanges().subscribe(data => {
+      this.forms = data;
+      this.forms.forEach(element => {
+        if (element.status == 'submitted') {
+          this.badgeSubCount++;
+          this.changeColorSub = true;
+        } else if (element.status == 'accepted') {
+          this.badgeChqCount++;
+          this.changeColorChq = true
+        } else if (element.status == 'ready') {
+          this.badgeColCount++;
+          this.changeColorCol = true;
+        }
+      });
+      this.generateCharts();
+    }
     );
 
   }
