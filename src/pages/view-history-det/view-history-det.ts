@@ -18,10 +18,11 @@ export class ViewHistoryDetPage {
   selectedItem;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.selectedItem = navParams.get('selectedItem');
+    console.log(this.selectedItem);
   }
 
   ionViewDidLoad() {
-    
+
   }
 
 }

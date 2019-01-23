@@ -74,9 +74,11 @@
         </table>
       </div>
       <div>
-        Attachments:
+        Receipt attachments:
         <!-- receiptfile -->
-        <img [src]="selectedReqToView.employeefile">
+        <div *ngFor="let image of selectedReqToView.employeefile" class='receiptImgDiv'>
+          <img [src]="image" imageViewer >
+        </div>
       </div>
 
       <div class="row">

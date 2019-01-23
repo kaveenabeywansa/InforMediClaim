@@ -23,6 +23,7 @@ export class ViewRequestDetPage {
   formKey;
   userKey;
   oldBalance;
+  requestBal;
   userName;
   uEmail;
   oldAcceptedCount = 0;
@@ -37,6 +38,8 @@ export class ViewRequestDetPage {
     var cur_year = new Date().getFullYear();
     this.current_date = cur_year + '-' + cur_month + '-' + cur_day;
     this.getAllKeys();
+
+    console.log(this.selectedReqToView);
   }
 
   ionViewDidLoad() {
@@ -76,10 +79,20 @@ export class ViewRequestDetPage {
         // user confirms action
         // validate if balance is available to claim
         if (this.oldBalance > this.selectedReqToView.amount) {
+          // calculate the new balance and counts
           const newBalance = parseInt(this.oldBalance) - parseInt(this.selectedReqToView.amount);
           const newAccepted = this.oldAcceptedCount + 1;
+          const newReqBal = parseInt(this.requestBal) - parseInt(this.selectedReqToView.amount);
+
+          // update db
           this.adf.object('/forms/' + this.formKey).update({ status: 'accepted', processDate: this.current_date });
-          this.adf.object('/users/' + this.userKey).update({ balance: newBalance, acceptedCount: newAccepted, pendingCount: (this.oldPendingCount - 1) });
+          this.adf.object('/users/' + this.userKey).update({
+            balance: newBalance,
+            acceptedCount: newAccepted,
+            pendingCount: (this.oldPendingCount - 1),
+            requestedClaimAmount: newReqBal
+          });
+
           // alert('Request has been accepted !');
           swal({
             type: 'success',
@@ -112,9 +125,18 @@ export class ViewRequestDetPage {
     }).then((result) => {
       if (result.value) {
         // executed when user confirms action
+        // calculations
         const newRejected = this.oldRejectedCount + 1;
+        const newReqBal = parseInt(this.requestBal) - parseInt(this.selectedReqToView.amount);
+
+        // update db
         this.adf.object('/forms/' + this.formKey).update({ status: 'rejected', processDate: this.current_date });
-        this.adf.object('/users/' + this.userKey).update({ rejectedCount: newRejected, pendingCount: (this.oldPendingCount - 1) });
+        this.adf.object('/users/' + this.userKey).update({
+          rejectedCount: newRejected,
+          pendingCount: (this.oldPendingCount - 1),
+          requestedClaimAmount: newReqBal
+        });
+
         // alert('Request has been rejected !');
         swal({
           type: 'error',
@@ -133,6 +155,7 @@ export class ViewRequestDetPage {
 
     users.valueChanges().subscribe(data => {
       this.oldBalance = data[0]['balance'];
+      this.requestBal = data[0]['requestedClaimAmount'];
       this.userName = data[0]['name'];
       this.uEmail = data[0]['email'];
       this.oldAcceptedCount = data[0]['acceptedCount'];

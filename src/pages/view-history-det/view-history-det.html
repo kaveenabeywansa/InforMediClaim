@@ -78,11 +78,15 @@
           </tr>
         </table>
       </div>
+
       <div>
-        Attachments:
+        Receipt attachments:
         <!-- receiptfile -->
-        <img [src]="selectedItem.employeefile">
+        <div *ngFor="let image of selectedItem.employeefile" class='receiptImgDiv'>
+          <img [src]="image" imageViewer >
+        </div>
       </div>
+
 
     </ion-card-content>
   </ion-card>

@@ -63,7 +63,7 @@ export class LoginPage {
         // match username against db credentials
         var users = this.afd.list('/users', ref => ref.orderByChild('username').equalTo(this.in_username)).valueChanges().subscribe(user_data => {
           if (user_data.length > 0) {
-            console.log(user_data);
+            // console.log(user_data);
             const db_pwd = user_data[0]['password'];
             if (db_pwd == this.in_password) {
               // correct credentials
