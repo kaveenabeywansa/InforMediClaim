@@ -22,11 +22,16 @@ export class HomePage {
   forms;
 
   constructor(public navCtrl: NavController, public adf: AngularFireDatabase, private platform: Platform) {
-    this.fetchDataFromFireBase();
   }
 
   ionViewDidLoad() {
+
+
+  }
+  ionViewDidEnter() {
+    this.fetchDataFromFireBase();
     this.generateCharts();
+    // this.navCtrl.resize();
   }
 
   generateCharts() {
@@ -42,8 +47,13 @@ export class HomePage {
       'width': this.platform.width()
     };
 
-    var chart = new google.visualization.PieChart(document.getElementById('adminDashCharts'));
-    chart.draw(data, options);
+    try {
+      var chart = new google.visualization.PieChart(document.getElementById('adminDashCharts'));
+      chart.draw(data, options);
+    } catch (e) {
+
+    }
+
   }
 
   goToPage(page) {
@@ -60,6 +70,12 @@ export class HomePage {
 
     // Get list of forms
     this.adf.list('/forms').valueChanges().subscribe(data => {
+      this.badgeSubCount = 0;
+      this.badgeChqCount = 0;
+      this.badgeColCount = 0;
+      this.changeColorSub = false;
+      this.changeColorChq = false;
+      this.changeColorCol = false;
       this.forms = data;
       this.forms.forEach(element => {
         if (element.status == 'submitted') {
